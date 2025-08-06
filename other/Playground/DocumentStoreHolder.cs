@@ -1,31 +1,23 @@
-using System;
-using System.Reflection;
-using Raven.Client;
-using Raven.Client.Document;
-using Raven.Client.Indexes;
+namespace Playground;
 
-namespace Playground
+public static class DocumentStoreHolder
 {
-    public static class DocumentStoreHolder
-    {
-        private static readonly Lazy<IDocumentStore> LazyStore =
-            new Lazy<IDocumentStore>(() =>
+    private static readonly Lazy<IDocumentStore> LazyStore =
+        new(() =>
+        {
+            var store = new DocumentStore
             {
-                var store = new DocumentStore
-                {
-                    Url = "http://localhost:8080",
-                    DefaultDatabase = "Northwind"
-                };
+                Urls = ["http://localhost:8080"],
+                Database = "Northwind"
+            };
 
-                store.Initialize();
+            store.Initialize();
 
-                var asm = Assembly.GetExecutingAssembly();
-                IndexCreation.CreateIndexes(asm, store);
+            var asm = Assembly.GetExecutingAssembly();
+            IndexCreation.CreateIndexes(asm, store);
 
-                return store;
-            });
+            return store;
+        });
 
-        public static IDocumentStore Store =>
-            LazyStore.Value;
-    }
+    public static IDocumentStore Store => LazyStore.Value;
 }
