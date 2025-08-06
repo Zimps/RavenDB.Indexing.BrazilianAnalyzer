@@ -6,6 +6,19 @@
     <AssemblyName>RavenDB.Indexing.BrazilianAnalyzer</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <LangVersion>13</LangVersion>
+    
+    <!-- NuGet Package Properties -->
+    <PackageId>RavenDB.Indexing.BrazilianAnalyzer</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Authors>Your Name</Authors>
+    <Company>Your Company</Company>
+    <Description>Brazilian Portuguese analyzer for RavenDB indexing with Lucene.Net</Description>
+    <PackageTags>ravendb;lucene;brazilian;portuguese;analyzer;indexing</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/yourusername/RavenDB.Indexing.BrazilianAnalyzer</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
