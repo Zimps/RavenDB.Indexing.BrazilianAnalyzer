@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <RootNamespace>RavenDB.Indexing.BrazilianAnalyzer</RootNamespace>
     <AssemblyName>RavenDB.Indexing.BrazilianAnalyzer</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -11,7 +11,7 @@
     <PackageId>RavenDB.Indexing.BrazilianAnalyzer</PackageId>
     <PackageVersion>1.0.0</PackageVersion>
     <Authors>Your Name</Authors>
-    <Company>Your Company</Company>
+    <Company>Zimps Tecnologia</Company>
     <Description>Brazilian Portuguese analyzer for RavenDB indexing with Lucene.Net</Description>
     <PackageTags>ravendb;lucene;brazilian;portuguese;analyzer;indexing</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -22,12 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Lucene.Net">
-      <HintPath>..\..\libs\Lucene.Net.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Lucene.Net" Version="3.0.60012" />
     <PackageReference Include="RavenDB.Client" Version="7.1.1" />
   </ItemGroup>
 
