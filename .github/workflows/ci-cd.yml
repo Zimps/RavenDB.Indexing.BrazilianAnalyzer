@@ -48,57 +48,64 @@ jobs:
     needs: build-and-test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    
+    strategy:
+      matrix:
+        rid: [ linux-x64, linux-arm64, win-x64, win-arm64 ]
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '9.0.x'
-        
+
     - name: Restore dependencies
       run: |
         dotnet restore src/Zimps.RavenDB.Indexing.BrAnalyzer/Zimps.RavenDB.Indexing.BrAnalyzer.csproj
         dotnet restore test/Zimps.RavenDB.Indexing.BrAnalyzer.Tests/Zimps.RavenDB.Indexing.BrAnalyzer.Tests.csproj
-      
+
     - name: Build Projects
       run: |
         dotnet build src/Zimps.RavenDB.Indexing.BrAnalyzer/Zimps.RavenDB.Indexing.BrAnalyzer.csproj --no-restore --configuration Release
         dotnet build test/Zimps.RavenDB.Indexing.BrAnalyzer.Tests/Zimps.RavenDB.Indexing.BrAnalyzer.Tests.csproj --no-restore --configuration Release
-      
+
     - name: Pack NuGet package
       run: |
         dotnet pack src/Zimps.RavenDB.Indexing.BrAnalyzer/Zimps.RavenDB.Indexing.BrAnalyzer.csproj \
           --configuration Release \
-          --output nupkgs \
+          --output nupkgs/${{ matrix.rid }} \
           --no-build \
           -p:PackageVersion=${{ env.NUGET_PACKAGE_VERSION }} \
-          -p:Version=${{ env.NUGET_PACKAGE_VERSION }}
-          
+          -p:Version=${{ env.NUGET_PACKAGE_VERSION }} \
+          -p:RuntimeIdentifier=${{ matrix.rid }}
+
     - name: Upload NuGet package artifact
       uses: actions/upload-artifact@v4
       with:
-        name: nuget-package
-        path: nupkgs/
+        name: nuget-package-${{ matrix.rid }}
+        path: nupkgs/${{ matrix.rid }}/
         retention-days: 30
 
   publish-nuget:
     needs: create-nuget-package
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    
+    strategy:
+      matrix:
+        rid: [ linux-x64, linux-arm64, win-x64, win-arm64 ]
+
     steps:
     - name: Download NuGet package artifact
       uses: actions/download-artifact@v4
       with:
-        name: nuget-package
-        path: nupkgs/
-        
+        name: nuget-package-${{ matrix.rid }}
+        path: nupkgs/${{ matrix.rid }}/
+
     - name: Publish to NuGet
       run: |
-        dotnet nuget push "nupkgs/*.nupkg" \
+        dotnet nuget push "nupkgs/${{ matrix.rid }}/*.nupkg" \
           --source https://api.nuget.org/v3/index.json \
           --api-key ${{ secrets.NUGET_API_KEY }} \
-          --skip-duplicate 
+          --skip-duplicate
