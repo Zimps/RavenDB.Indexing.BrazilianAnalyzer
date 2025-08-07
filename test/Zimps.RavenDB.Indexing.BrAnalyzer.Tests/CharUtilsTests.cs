@@ -1,4 +1,4 @@
-﻿namespace RavenDB.Indexing.BrazilianAnalyzerTests;
+﻿namespace Zimps.RavenDB.Indexing.BrAnalyzer.Tests;
 
 public class CharUtilsTests
 {

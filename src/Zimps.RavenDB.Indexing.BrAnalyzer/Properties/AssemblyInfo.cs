@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RavenDB.Indexing.BrazilianAnalyzerTests")]
+[assembly: AssemblyTitle("Zimps.RavenDB.Indexing.BrAnalyzer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("RavenDB.Indexing.BrazilianAnalyzerTests")]
+[assembly: AssemblyProduct("Zimps.RavenDB.Indexing.BrAnalyzer")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("85bd2921-695a-497b-abb0-5bf96305cdaf")]
+[assembly: Guid("f083bc92-e949-498e-bba0-4c9e1391563f")]
 
 // Version information for an assembly consists of the following four values:
 //

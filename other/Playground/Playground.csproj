@@ -10,6 +10,6 @@
     <PackageReference Include="RavenDB.Client" Version="7.1.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\RavenDB.Indexing.BrazilianAnalyzer\RavenDB.Indexing.BrazilianAnalyzer.csproj" />
+    <ProjectReference Include="..\..\src\Zimps.RavenDB.Indexing.BrAnalyzer\Zimps.RavenDB.Indexing.BrAnalyzer.csproj" />
   </ItemGroup>
 </Project>

@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  NUGET_PACKAGE_NAME: RavenDB.Indexing.BrazilianAnalyzer
+  NUGET_PACKAGE_NAME: Zimps.RavenDB.Indexing.BrAnalyzer
   NUGET_PACKAGE_VERSION: ${{ github.run_number }}
 
 jobs:
@@ -25,16 +25,16 @@ jobs:
         
     - name: Restore dependencies
       run: |
-        dotnet restore src/RavenDB.Indexing.BrazilianAnalyzer/RavenDB.Indexing.BrazilianAnalyzer.csproj
-        dotnet restore test/RavenDB.Indexing.BrazilianAnalyzerTests/RavenDB.Indexing.BrazilianAnalyzerTests.csproj
+        dotnet restore src/Zimps.RavenDB.Indexing.BrAnalyzer/Zimps.RavenDB.Indexing.BrAnalyzer.csproj
+        dotnet restore test/Zimps.RavenDB.Indexing.BrAnalyzer.Tests/Zimps.RavenDB.Indexing.BrAnalyzer.csproj
       
-    - name: Build solution
+    - name: Build Projects
       run: |
-        dotnet build src/RavenDB.Indexing.BrazilianAnalyzer/RavenDB.Indexing.BrazilianAnalyzer.csproj --no-restore --configuration Release
-        dotnet build test/RavenDB.Indexing.BrazilianAnalyzerTests/RavenDB.Indexing.BrazilianAnalyzerTests.csproj --no-restore --configuration Release
+        dotnet build src/Zimps.RavenDB.Indexing.BrAnalyzer/Zimps.RavenDB.Indexing.BrAnalyzer.csproj --no-restore --configuration Release
+        dotnet build test/Zimps.RavenDB.Indexing.BrAnalyzer.Tests/Zimps.RavenDB.Indexing.BrAnalyzer.Tests.csproj --no-restore --configuration Release
       
     - name: Run tests
-      run: dotnet test test/RavenDB.Indexing.BrazilianAnalyzerTests/RavenDB.Indexing.BrazilianAnalyzerTests.csproj --no-build --verbosity normal --configuration Release --logger trx --results-directory TestResults --collect:"XPlat Code Coverage"
+      run: dotnet test test/Zimps.RavenDB.Indexing.BrAnalyzer.Tests/Zimps.RavenDB.Indexing.BrAnalyzer.Tests.csproj --no-build --verbosity normal --configuration Release --logger trx --results-directory TestResults --collect:"XPlat Code Coverage"
       
     - name: Upload test results
       uses: actions/upload-artifact@v4
@@ -60,17 +60,17 @@ jobs:
         
     - name: Restore dependencies
       run: |
-        dotnet restore src/RavenDB.Indexing.BrazilianAnalyzer/RavenDB.Indexing.BrazilianAnalyzer.csproj
-        dotnet restore test/RavenDB.Indexing.BrazilianAnalyzerTests/RavenDB.Indexing.BrazilianAnalyzerTests.csproj
+        dotnet restore src/Zimps.RavenDB.Indexing.BrAnalyzer/Zimps.RavenDB.Indexing.BrAnalyzer.csproj
+        dotnet restore test/Zimps.RavenDB.Indexing.BrAnalyzer.Tests/Zimps.RavenDB.Indexing.BrAnalyzer.csproj
       
-    - name: Build solution
+    - name: Build Projects
       run: |
-        dotnet build src/RavenDB.Indexing.BrazilianAnalyzer/RavenDB.Indexing.BrazilianAnalyzer.csproj --no-restore --configuration Release
-        dotnet build test/RavenDB.Indexing.BrazilianAnalyzerTests/RavenDB.Indexing.BrazilianAnalyzerTests.csproj --no-restore --configuration Release
+        dotnet build src/Zimps.RavenDB.Indexing.BrAnalyzer/Zimps.RavenDB.Indexing.BrAnalyzer.csproj --no-restore --configuration Release
+        dotnet build test/Zimps.RavenDB.Indexing.BrAnalyzer.Tests/Zimps.RavenDB.Indexing.BrAnalyzer.Tests.csproj --no-restore --configuration Release
       
     - name: Pack NuGet package
       run: |
-        dotnet pack src/RavenDB.Indexing.BrazilianAnalyzer/RavenDB.Indexing.BrazilianAnalyzer.csproj \
+        dotnet pack src/Zimps.RavenDB.Indexing.BrAnalyzer/Zimps.RavenDB.Indexing.BrAnalyzer.csproj \
           --configuration Release \
           --output nupkgs \
           --no-build \
