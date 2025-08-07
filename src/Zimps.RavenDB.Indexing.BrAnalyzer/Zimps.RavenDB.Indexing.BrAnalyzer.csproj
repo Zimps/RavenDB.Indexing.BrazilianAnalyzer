@@ -2,13 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <RootNamespace>RavenDB.Indexing.BrazilianAnalyzer</RootNamespace>
-    <AssemblyName>RavenDB.Indexing.BrazilianAnalyzer</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <LangVersion>13</LangVersion>
     
     <!-- NuGet Package Properties -->
-    <PackageId>RavenDB.Indexing.BrazilianAnalyzer</PackageId>
+    <PackageId>Zimps.RavenDB.Indexing.BrAnalyzer</PackageId>
     <PackageVersion>1.0.0</PackageVersion>
     <Authors>Your Name</Authors>
     <Company>Zimps Tecnologia</Company>

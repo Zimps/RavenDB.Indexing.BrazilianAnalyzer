@@ -11,9 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5575056B-C7A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{27971CBC-C3A3-4453-B1DE-C7D8F10F7517}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RavenDB.Indexing.BrazilianAnalyzer", "src\RavenDB.Indexing.BrazilianAnalyzer\RavenDB.Indexing.BrazilianAnalyzer.csproj", "{F083BC92-E949-498E-BBA0-4C9E1391563F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zimps.RavenDB.Indexing.BrAnalyzer", "src\Zimps.RavenDB.Indexing.BrAnalyzer\Zimps.RavenDB.Indexing.BrAnalyzer.csproj", "{F083BC92-E949-498E-BBA0-4C9E1391563F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RavenDB.Indexing.BrazilianAnalyzerTests", "test\RavenDB.Indexing.BrazilianAnalyzerTests\RavenDB.Indexing.BrazilianAnalyzerTests.csproj", "{85BD2921-695A-497B-ABB0-5BF96305CDAF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zimps.RavenDB.Indexing.BrAnalyzer.Tests", "test\Zimps.RavenDB.Indexing.BrAnalyzer.Tests\Zimps.RavenDB.Indexing.BrAnalyzer.Tests.csproj", "{85BD2921-695A-497B-ABB0-5BF96305CDAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

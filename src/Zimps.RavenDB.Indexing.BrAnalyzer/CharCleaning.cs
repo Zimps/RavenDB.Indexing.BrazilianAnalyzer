@@ -1,4 +1,4 @@
-namespace RavenDB.Indexing.BrazilianAnalyzer;
+namespace Zimps.RavenDB.Indexing.BrAnalyzer;
 
 public static class CharUtils
 {
