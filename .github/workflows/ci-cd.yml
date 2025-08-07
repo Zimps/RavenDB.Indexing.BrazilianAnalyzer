@@ -8,7 +8,7 @@ on:
 
 env:
   NUGET_PACKAGE_NAME: Zimps.RavenDB.Indexing.BrAnalyzer
-  NUGET_PACKAGE_VERSION: ${{ github.run_number }}
+  NUGET_PACKAGE_VERSION: 0.0.${{ github.run_number }}
 
 jobs:
   build-and-test:
