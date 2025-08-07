@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <OutputType>Exe</OutputType>
@@ -7,13 +6,10 @@
     <AssemblyName>Playground</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="RavenDB.Client" Version="7.1.1" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\src\RavenDB.Indexing.BrazilianAnalyzer\RavenDB.Indexing.BrazilianAnalyzer.csproj" />
   </ItemGroup>
-
 </Project>
