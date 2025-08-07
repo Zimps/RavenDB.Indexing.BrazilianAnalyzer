@@ -26,7 +26,7 @@ jobs:
     - name: Restore dependencies
       run: |
         dotnet restore src/Zimps.RavenDB.Indexing.BrAnalyzer/Zimps.RavenDB.Indexing.BrAnalyzer.csproj
-        dotnet restore test/Zimps.RavenDB.Indexing.BrAnalyzer.Tests/Zimps.RavenDB.Indexing.BrAnalyzer.csproj
+        dotnet restore test/Zimps.RavenDB.Indexing.BrAnalyzer.Tests/Zimps.RavenDB.Indexing.BrAnalyzer.Tests.csproj
       
     - name: Build Projects
       run: |
