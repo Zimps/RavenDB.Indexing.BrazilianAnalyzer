@@ -1,27 +1,22 @@
-﻿using NUnit.Framework;
-using RavenDB.Indexing.BrazilianAnalyzer;
+﻿namespace RavenDB.Indexing.BrazilianAnalyzerTests;
 
-namespace RavenDB.Indexing.BrazilianAnalyzerTests
+public class CharUtilsTests
 {
-    [TestFixture]
-    public class CharUtilsTests
+    [Theory]
+    [InlineData('á', 'a')]
+    [InlineData('Á', 'a')]
+    [InlineData('ü', 'u')]
+    [InlineData('à', 'a')]
+    [InlineData('ç', 'c')]
+    [InlineData('Ç', 'c')]
+    public void ToLowerAndRemovingAccentMarksShouldResultIn(
+        char input,
+        char expectedOutput
+    )
     {
-        [TestCase('á', 'a')]
-        [TestCase('Á', 'a')]
-        [TestCase('ü', 'u')]
-        [TestCase('à', 'a')]
-        [TestCase('ç', 'c')]
-        [TestCase('Ç', 'c')]
-        public void ToLowerAndRemovingAccentMarksShouldResultIn(
-            char input,
-            char expectedOutput
-        )
-        {
-            Assert.AreEqual(
-                expectedOutput,
-                CharUtils.RemoveAccentMark(CharUtils.ToLower(input))
-            );
-        }
+        Assert.Equal(
+            expectedOutput,
+            CharUtils.RemoveAccentMark(CharUtils.ToLower(input))
+        );
     }
 }
-

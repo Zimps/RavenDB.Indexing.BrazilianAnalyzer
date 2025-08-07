@@ -1,0 +1,104 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NUGET_PACKAGE_NAME: RavenDB.Indexing.BrazilianAnalyzer
+  NUGET_PACKAGE_VERSION: ${{ github.run_number }}
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+        
+    - name: Restore dependencies
+      run: |
+        dotnet restore src/RavenDB.Indexing.BrazilianAnalyzer/RavenDB.Indexing.BrazilianAnalyzer.csproj
+        dotnet restore test/RavenDB.Indexing.BrazilianAnalyzerTests/RavenDB.Indexing.BrazilianAnalyzerTests.csproj
+      
+    - name: Build solution
+      run: |
+        dotnet build src/RavenDB.Indexing.BrazilianAnalyzer/RavenDB.Indexing.BrazilianAnalyzer.csproj --no-restore --configuration Release
+        dotnet build test/RavenDB.Indexing.BrazilianAnalyzerTests/RavenDB.Indexing.BrazilianAnalyzerTests.csproj --no-restore --configuration Release
+      
+    - name: Run tests
+      run: dotnet test test/RavenDB.Indexing.BrazilianAnalyzerTests/RavenDB.Indexing.BrazilianAnalyzerTests.csproj --no-build --verbosity normal --configuration Release --logger trx --results-directory TestResults --collect:"XPlat Code Coverage"
+      
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: TestResults/
+        retention-days: 30
+
+  create-nuget-package:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+        
+    - name: Restore dependencies
+      run: |
+        dotnet restore src/RavenDB.Indexing.BrazilianAnalyzer/RavenDB.Indexing.BrazilianAnalyzer.csproj
+        dotnet restore test/RavenDB.Indexing.BrazilianAnalyzerTests/RavenDB.Indexing.BrazilianAnalyzerTests.csproj
+      
+    - name: Build solution
+      run: |
+        dotnet build src/RavenDB.Indexing.BrazilianAnalyzer/RavenDB.Indexing.BrazilianAnalyzer.csproj --no-restore --configuration Release
+        dotnet build test/RavenDB.Indexing.BrazilianAnalyzerTests/RavenDB.Indexing.BrazilianAnalyzerTests.csproj --no-restore --configuration Release
+      
+    - name: Pack NuGet package
+      run: |
+        dotnet pack src/RavenDB.Indexing.BrazilianAnalyzer/RavenDB.Indexing.BrazilianAnalyzer.csproj \
+          --configuration Release \
+          --output nupkgs \
+          --no-build \
+          -p:PackageVersion=${{ env.NUGET_PACKAGE_VERSION }} \
+          -p:Version=${{ env.NUGET_PACKAGE_VERSION }}
+          
+    - name: Upload NuGet package artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-package
+        path: nupkgs/
+        retention-days: 30
+
+  publish-nuget:
+    needs: create-nuget-package
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: Download NuGet package artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: nuget-package
+        path: nupkgs/
+        
+    - name: Publish to NuGet
+      run: |
+        dotnet nuget push "nupkgs/*.nupkg" \
+          --api-key ${{ secrets.NUGET_API_KEY }} \
+          --source https://api.nuget.org/v3/index.json \
+          --skip-duplicate 

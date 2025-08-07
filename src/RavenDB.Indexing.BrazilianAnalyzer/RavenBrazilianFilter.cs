@@ -1,111 +1,112 @@
-﻿using System;
-using System.IO;
-using Lucene.Net.Analysis;
-using Lucene.Net.Analysis.Standard;
-using Lucene.Net.Analysis.Tokenattributes;
+﻿namespace RavenDB.Indexing.BrazilianAnalyzer;
 
-namespace RavenDB.Indexing.BrazilianAnalyzer
+public sealed class RavenBrazilianFilter : TokenFilter
 {
-    public sealed class RavenBrazilianFilter : TokenFilter
+    private static readonly string[] BrazilianStopWords =
+    [
+        "a","ainda","alem","ambas","ambos","antes",
+        "ao","aonde","aos","apos","aquele","aqueles",
+        "as","assim","com","como","contra","contudo",
+        "cuja","cujas","cujo","cujos","da","das","de",
+        "dela","dele","deles","demais","depois","desde",
+        "desta","deste","dispoe","dispoem","diversa",
+        "diversas","diversos","do","dos","durante","e",
+        "ela","elas","ele","eles","em","entao","entre",
+        "essa","essas","esse","esses","esta","estas",
+        "este","estes","ha","isso","isto","logo","mais",
+        "mas","mediante","menos","mesma","mesmas","mesmo",
+        "mesmos","na","nas","nao","nas","nem","nesse","neste",
+        "nos","o","os","ou","outra","outras","outro","outros",
+        "pelas","pelas","pelo","pelos","perante","pois","por",
+        "porque","portanto","proprio","proprios","quais","qual",
+        "qualquer","quando","quanto","que","quem","quer","se",
+        "seja","sem","sendo","seu","seus","sob","sobre","sua",
+        "suas","tal","tambem","teu","teus","toda","todas","todo",
+        "todos","tua","tuas","tudo","um","uma","umas","uns"
+    ];
+
+    private readonly TokenStream _innerInputStream;
+    private readonly ITermAttribute _termAtt;
+    private readonly ITypeAttribute _typeAtt;
+
+    private const string AcronymType = "<ACRONYM>";
+    private readonly CharArraySet _stopWords = new(BrazilianStopWords, false);
+
+    public RavenBrazilianFilter(TokenStream input) : base(input)
     {
-        public static string[] BRAZILIAN_STOP_WORDS = {
-            "a","ainda","alem","ambas","ambos","antes",
-            "ao","aonde","aos","apos","aquele","aqueles",
-            "as","assim","com","como","contra","contudo",
-            "cuja","cujas","cujo","cujos","da","das","de",
-            "dela","dele","deles","demais","depois","desde",
-            "desta","deste","dispoe","dispoem","diversa",
-            "diversas","diversos","do","dos","durante","e",
-            "ela","elas","ele","eles","em","entao","entre",
-            "essa","essas","esse","esses","esta","estas",
-            "este","estes","ha","isso","isto","logo","mais",
-            "mas","mediante","menos","mesma","mesmas","mesmo",
-            "mesmos","na","nas","nao","nas","nem","nesse","neste",
-            "nos","o","os","ou","outra","outras","outro","outros",
-            "pelas","pelas","pelo","pelos","perante","pois","por",
-            "porque","portanto","proprio","proprios","quais","qual",
-            "qualquer","quando","quanto","que","quem","quer","se",
-            "seja","sem","sendo","seu","seus","sob","sobre","sua",
-            "suas","tal","tambem","teu","teus","toda","todas","todo",
-            "todos","tua","tuas","tudo","um","uma","umas","uns"
-        };
+        _innerInputStream = input;
+        _termAtt = AddAttribute<ITermAttribute>();
+        _typeAtt = AddAttribute<ITypeAttribute>();
+    }
 
-        private readonly TokenStream _innerInputStream;
-        private readonly ITermAttribute _termAtt;
-        private readonly ITypeAttribute _typeAtt;
-        
-        private const string AcronymType = "<ACRONYM>";
-        private readonly CharArraySet _stopWords = new CharArraySet(BRAZILIAN_STOP_WORDS, false);
-
-        public RavenBrazilianFilter(TokenStream input) : base(input)
+    public override bool IncrementToken()
+    {
+        if (!input.IncrementToken())
         {
-            _innerInputStream = input;
-            _termAtt = AddAttribute<ITermAttribute>();
-            _typeAtt = AddAttribute<ITypeAttribute>();
+            return false;
         }
 
-        public override bool IncrementToken()
+        var buffer = _termAtt.TermBuffer();
+        var bufferLength = _termAtt.TermLength();
+        var type = _typeAtt.Type;
+
+        var bufferUpdated = true;
+
+        if (type == AcronymType)
         {
-            if (!input.IncrementToken())
+            // remove dots
+            var upto = 0;
+
+            for (var i = 0; i < bufferLength; i++)
             {
-                return false;
-            }
+                var c = buffer[i];
 
-            var buffer = _termAtt.TermBuffer();
-            var bufferLength = _termAtt.TermLength();
-            var type = _typeAtt.Type;
-
-            var bufferUpdated = true;
-
-            if (type == AcronymType)
-            {
-                // remove dots
-                var upto = 0;
-                for (int i = 0; i < bufferLength; i++)
+                if (c != '.')
                 {
-                    var c = buffer[i];
-                    if (c != '.')
-                        buffer[upto++] = CharUtils.ToLower(c);
+                    buffer[upto++] = CharUtils.ToLower(c);
                 }
-                _termAtt.SetTermLength(upto);
             }
-            else
-            {
-                do
-                {
-                    //If we consumed a stop word we need to update the buffer and its length.
-                    if (!bufferUpdated)
-                    {
-                        bufferLength = _termAtt.TermLength();
-                        buffer = _termAtt.TermBuffer();
-                    }
 
-                    for (var i = 0; i < bufferLength; i++)
-                    {
-                        buffer[i] = CharUtils.RemoveAccentMark(CharUtils.ToLower(buffer[i]));
-                    }
-
-                    if (!_stopWords.Contains(buffer, 0, bufferLength))
-                    {
-                        return true;
-                    }
-
-                    bufferUpdated = false;
-                } while (input.IncrementToken());
-
-                return false;
-            }
-            return true;
+            _termAtt.SetTermLength(upto);
         }
-
-        internal bool Reset(TextReader reader)
+        else
         {
-            var input = _innerInputStream as StandardTokenizer;
+            do
+            {
+                //If we consumed a stop word we need to update the buffer and its length.
+                if (!bufferUpdated)
+                {
+                    bufferLength = _termAtt.TermLength();
+                    buffer = _termAtt.TermBuffer();
+                }
 
-            if (input == null) return false;
+                for (var i = 0; i < bufferLength; i++)
+                {
+                    buffer[i] = CharUtils.RemoveAccentMark(CharUtils.ToLower(buffer[i]));
+                }
 
-            input.Reset(reader);
-            return true;
+                if (!_stopWords.Contains(buffer, 0, bufferLength))
+                {
+                    return true;
+                }
+
+                bufferUpdated = false;
+            } while (input.IncrementToken());
+
+            return false;
         }
+
+        return true;
+    }
+
+    internal bool Reset(TextReader reader)
+    {
+        if (_innerInputStream is not StandardTokenizer standardTokenizer)
+        {
+            return false;
+        }
+
+        standardTokenizer.Reset(reader);
+        return true;
     }
 }

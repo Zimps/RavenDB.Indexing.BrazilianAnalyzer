@@ -1,23 +1,15 @@
-using System.Linq;
-using Raven.Abstractions.Indexing;
-using Raven.Client.Indexes;
-using RavenDB.Indexing.BrazilianAnalyzer;
+namespace Playground;
 
-namespace Playground
+public sealed class Products_SearchByName : AbstractIndexCreationTask<Product>
 {
-    public class Products_SearchByName : AbstractIndexCreationTask<Product>
+    public Products_SearchByName()
     {
-        public Products_SearchByName()
+        Map = products => products.Select(p => new
         {
-            Map = products =>
-                from p in products
-                select new
-                {
-                    p.Name
-                };
+            p.Name
+        });
 
-            Index(entry => entry.Name, FieldIndexing.Analyzed);
-            Analyze(entry => entry.Name, typeof(RavenBrazilianAnalyzer).AssemblyQualifiedName);
-        }
+        Index(entry => entry.Name, FieldIndexing.Search);
+        Analyze(entry => entry.Name, typeof(RavenBrazilianAnalyzer).AssemblyQualifiedName);
     }
 }
