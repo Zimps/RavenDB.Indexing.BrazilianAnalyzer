@@ -7,14 +7,14 @@
     
     <!-- NuGet Package Properties -->
     <PackageId>Zimps.RavenDB.Indexing.BrAnalyzer</PackageId>
-    <PackageVersion>1.0.0</PackageVersion>
-    <Authors>Your Name</Authors>
+    <PackageVersion>0.0.1</PackageVersion>
+    <Authors>Tech Team @ Zimps</Authors>
     <Company>Zimps Tecnologia</Company>
     <Description>Brazilian Portuguese analyzer for RavenDB indexing with Lucene.Net</Description>
     <PackageTags>ravendb;lucene;brazilian;portuguese;analyzer;indexing</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/yourusername/RavenDB.Indexing.BrazilianAnalyzer</RepositoryUrl>
+    <RepositoryUrl>https://github.com/zimps/RavenDB.Indexing.BrazilianAnalyzer</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
