@@ -34,7 +34,7 @@ jobs:
         dotnet build test/RavenDB.Indexing.BrazilianAnalyzerTests/RavenDB.Indexing.BrazilianAnalyzerTests.csproj --no-restore --configuration Release
       
     - name: Run tests
-      run: dotnet test test/RavenDB.Indexing.BrazilianAnalyzerTests/RavenDB.Indexing.BrazilianAnalyzerTests.csproj --no-build --verbosity normal --configuration Release
+      run: dotnet test test/RavenDB.Indexing.BrazilianAnalyzerTests/RavenDB.Indexing.BrazilianAnalyzerTests.csproj --no-build --verbosity normal --configuration Release --logger trx --results-directory TestResults --collect:"XPlat Code Coverage"
       
     - name: Upload test results
       uses: actions/upload-artifact@v4
